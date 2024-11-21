@@ -26,7 +26,7 @@
 
 - Link to Assignment 1 (Figma deliverable): [**Assignment 1: Figma**](assignments/HCI-Figma-Demo.mkv)
 - Link to Assignment 2 (User personas and Sitemap): [**Assignment 2:**](assignments/UserPersonasAndSitemap/)
-- Link to Assignment 3: [**Assignment 3**](URL_TO_ASSIGNMENT_3) <!-- Replace with actual URL -->
+- Link to Assignment 3 (Now deployed on Vercel): [**Assignment 3**](https://fitness-app-phi-gray.vercel.app/)
 <!-- Add more assignments as necessary -->
 
 ## Project Requirements
