@@ -8,9 +8,9 @@ export type Post = {
 };
 
 //Currently use dummy blogs from jsonplaceholder, TODO: replace with actual data for app
-type BlogPageProps = {
-  searchParams: { page: string };
-};
+type BlogPageProps = Promise<{
+  page: string;
+}>;
 
 type PagingInfo = {
   _start?: number;
@@ -105,8 +105,8 @@ function Pagination(pagination: PaginationProps) {
   );
 }
 
-export default async function ForumsPage({ searchParams }: BlogPageProps) {
-  const { page } = await searchParams;
+export default async function ForumsPage(props: { searchParams: BlogPageProps }) {
+  const { page } = await props.searchParams;
   const postsCount = await getPostsCount();
   const pagesCount = Math.ceil(postsCount / PAGE_SIZE);
   // Ensure the page number is a positive integer.
