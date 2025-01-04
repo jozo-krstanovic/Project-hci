@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { BASE_API_URL } from "../page";
 import type { Post } from "../page";
 
 type BlogPostProps = Promise<{
   id: string;
 }>;
+
+const BASE_API_URL = "https://jsonplaceholder.typicode.com";
   
 async function getPost(id: string): Promise<Post> {
 	const data = await fetch(`${BASE_API_URL}/posts/${id}`);
