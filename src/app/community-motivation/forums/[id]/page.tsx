@@ -2,9 +2,9 @@ import Link from "next/link";
 import { BASE_API_URL } from "../page";
 import type { Post } from "../page";
 
-type BlogPostProps = {
-  params: { id: string };
-};
+type BlogPostProps = Promise<{
+  id: string;
+}>;
   
 async function getPost(id: string): Promise<Post> {
 	const data = await fetch(`${BASE_API_URL}/posts/${id}`);
@@ -13,10 +13,10 @@ async function getPost(id: string): Promise<Post> {
 
 //This is a placeholder component to showcase dynamic routes in Next.js
 //Will be exchanged for useful information later
-export default async function BlogPost({ params }: BlogPostProps) {
-	
+export default async function BlogPost(props: { params: BlogPostProps }) {
+
 	//As of Next.js 15 onwards dynamic routing params such as search params should be awaited
-	const postParams = await params;
+	const postParams = await props.params;
 	const post = await getPost(postParams.id);
 	const { id, title, body } = post;
 	return (
