@@ -28,6 +28,8 @@
 - Link to Assignment 2 (User personas and Sitemap): [**Assignment 2:**](assignments/UserPersonasAndSitemap/)
 - Link to Assignment 3 (Now deployed on Vercel): [**Assignment 3: Deployed App**](https://fitness-app-phi-gray.vercel.app/)
 - Link to Assignment 4 (Currently only Low Fidelity): [**Assignment 4: Low/High Fidelity Prototype**](assignments/DesignPrototypes/LowFidelityLanding.png)
+- Link to Assignment 5 (Dynamic routing): [**Assignment 5: Dynamic Routing/Data fetching**]
+(https://fitness-app-phi-gray.vercel.app/)
 <!-- Add more assignments as necessary -->
 
 ## Project Requirements
