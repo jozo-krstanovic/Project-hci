@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Ubuntu, Montserrat } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "../components/navigation";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+const ubuntu = Ubuntu({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-ubuntu",
+  display: "swap",
+  fallback: ["arial", "sans-serif"],
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+
+const montserrat = Montserrat({
+  weight: ["400", "700", "900"],
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  fallback: ["arial", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -27,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${ubuntu.variable} ${montserrat.variable} antialiased w-full max-w-screen`}
       >
         <Navigation />
         {children}
