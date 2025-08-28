@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Ubuntu, Montserrat } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "../components/navigation";
+import Footer from "@/components/footer";
 
 const ubuntu = Ubuntu({
   weight: ["400", "700"],
@@ -35,6 +36,7 @@ export default function RootLayout({
       >
         <Navigation />
         {children}
+        <Footer />
       </body>
     </html>
   );

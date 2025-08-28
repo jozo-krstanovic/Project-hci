@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <div className="bg-brand-black px-[20px] sm:px-[100px] py-[50px] flex flex-col items-start">
+    <div className="bg-brand-black text-white px-[20px] sm:px-[100px] py-[50px] flex flex-col items-start">
       <div className="my-[25px]">
         <Logo />
       </div>
@@ -51,21 +51,21 @@ export default function Footer() {
           <h2 className="text-[28px]">Contact us</h2>
           <div className="flex flex-col">
             <div className="flex items-center">
-              <Image 
+              <Image
                 src={"/assets/email-icon.png"}
                 width={28}
                 height={28}
                 alt="Email"
-                />
+              />
               <p className="font-montserrat text-[12px] ml-[10px]">contact@example.com</p>
             </div>
             <div className="flex items-center">
-              <Image 
+              <Image
                 src={"/assets/phone-icon.png"}
                 width={28}
                 height={28}
                 alt="Phone"
-                />
+              />
               <p className="font-montserrat text-[12px] ml-[10px]">+385 987 6543 21</p>
             </div>
           </div>

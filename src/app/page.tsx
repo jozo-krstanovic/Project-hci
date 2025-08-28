@@ -1,21 +1,19 @@
-import FeaturePreview from "../components/featurePreview";
-import Footer from "../components/footer";
+import { JoinNowButton } from "@/components/JoinNowButton";
+import FeaturePreview from "@/components/featurePreview";
 
 export default function Home() {
   return (
     <>
       {/* Hero Section */}
       <div className="relative w-full px-4 sm:px-10 md:px-[178px] py-10 sm:py-[120px]">
-        <div className="py-[10px] absolute inset-0 bg-[url('/assets/hero-image.jpg')] bg-cover bg-center filter brightness-50"></div>
+        <div className="py-[10px] absolute inset-0 bg-[url('/assets/hero-image.jpg')] bg-cover bg-center filter brightness-[0.4]"></div>
         <h1 className="py-[10px] text-center sm:text-left text-white font-bold text-[48px] md:text-[64px] relative">Get Stronger <br></br> Feel Better</h1>
         <p className="py-[10px] text-center sm:text-left text-white font-montserrat text-[20px] relative">
           Your journey starts here.<br />
           Top equipment, expert trainers,<br />
           and a community that pushes you further
         </p>
-        <button className="block mx-auto sm:mx-0 text-center sm:text-left bg-brand-fill font-montserrat text-brand-text-strong text-[16px] relative px-[30px] py-[15px] font-bold rounded-[5px]">
-          Join Now
-        </button>
+        <JoinNowButton className="mx-auto sm:mx-0 text-center font-montserrat sm:text-left text-[16px] relative px-[30px] py-[15px] font-bold rounded-[5px]" />
       </div>
 
       {/* Features Section */}
@@ -31,12 +29,9 @@ export default function Home() {
         </div>
         <div className="flex flex-col sm:flex-row items-center text-center sm:text-left h-auto my-[40px]">
           <h1 className="text-[32px] px-[25px]">What are you waiting for?</h1>
-          <button className="text-dark px-[30px] py-[15px] border-solid border-[5px] border-black rounded-[5px] font-montserrat font-bold flex items-center justify-center">Join Now</button>
+          <JoinNowButton className="px-[30px] py-[15px] font-montserrat font-bold flex items-center justify-center" />
         </div>
       </div>
-
-      {/* Footer Section */}
-      <Footer />
     </>
   );
 }

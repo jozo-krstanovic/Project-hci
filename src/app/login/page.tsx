@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { login } from "@/api/api";
-import Footer from "@/components/footer";
+import { supabase } from "@/lib/supabase/client"; // Import Supabase client
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -17,25 +16,32 @@ export default function LoginPage() {
     setError(null); // Reset error state
 
     try {
-      const response = await login(email, password);
-      const { token } = response.data;
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-      if (token) {
-        // In a real app, you'd store the token securely (e.g., in an HttpOnly cookie)
-        console.log("Login successful, token:", token);
-        router.push("/"); // Redirect to homepage
+      if (authError) {
+        setError(authError.message);
+        console.error("Supabase login error:", authError);
+        return;
+      }
+
+      if (data.user) {
+        console.log("Login successful, user:", data.user);
+        router.push("/"); // Redirect to homepage on successful login
       }
     } catch (err) {
-      console.error("Login failed:", err);
-      setError("Login failed. Please check your credentials.");
+      console.error("Unexpected error during login:", err);
+      setError("An unexpected error occurred. Please try again.");
     }
   };
 
   return (
     <>
-      <main className="flex items-center justify-center min-h-screen bg-brand-fill px-4 py-12 overflow-hidden">
+      <main className="flex flex-col bg-[#ededed] px-4 py-8">
         {/* Card */}
-        <div className="bg-white w-full max-w-lg lg:max-w-xl border border-black rounded-xl shadow-md p-10">
+        <div className="bg-card bg-background w-full max-w-lg lg:max-w-xl border rounded-xl shadow-md p-10 mx-auto my-auto">
 
           {/* Title */}
           <h1 className="text-center text-3xl font-bold mb-8 text-black">
@@ -63,7 +69,7 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="w-full border-2 border-black text-black font-montserrat font-bold py-4 rounded-[5px] transition duration-200 hover:bg-black hover:text-white"
+              className="w-full border-[3px] border-black text-black font-montserrat font-bold py-4 rounded-[5px] transition duration-200 hover:bg-black hover:text-white"
             >
               Login
             </button>
@@ -80,7 +86,6 @@ export default function LoginPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </>
   );
 }

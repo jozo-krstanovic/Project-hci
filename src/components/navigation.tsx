@@ -46,8 +46,8 @@ function processPage(page: Page, index: number, pathname: string, onClick?: () =
               ? "underline"
               : ""
             : pathname.startsWith(page.path)
-            ? "underline"
-            : ""
+              ? "underline"
+              : ""
         }
       >
         {page.title}
@@ -70,7 +70,7 @@ export function Navigation() {
   useClickOutside(hamburgerRef, closeMenu);
   useClickOutside(dropdownRef, closeDropdown);
   return (
-    <div ref={hamburgerRef} className="flex relative justify-between items-center p-[20px] bg-brand-dark-background h-[80px]">
+    <div ref={hamburgerRef} className="flex relative justify-between text-white items-center p-[20px] bg-brand-dark-background h-[80px]">
       <Logo />
       <ul className="hidden lg:flex justify-center space-x-4">
         {pages.map((page, index) => processPage(page, index, pathname))}
@@ -131,12 +131,12 @@ export function Navigation() {
         <Link className="px-4 font-montserrat text-[20px]"
           onClick={closeMenu}
           href={"/login"}>
-            Login
+          Login
         </Link>
         <Link className="px-4 font-montserrat text-[20px]"
           onClick={closeMenu}
           href={"/sign-up"}>
-            Sign up
+          Sign up
         </Link>
       </ul>
     </div>
