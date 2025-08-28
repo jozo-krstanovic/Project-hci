@@ -1,8 +1,9 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Logo = () => {
     return (
-        <div className='flex items-center justify-center'>
+        <Link href="/" className='flex items-center justify-center'>
             <Image 
                 src={"/assets/palestra-light.png"}
                 width={50}
@@ -10,7 +11,7 @@ const Logo = () => {
                 alt=''
             />
             <span className='font-ubuntu font-bold text-[32px]'>Palestra</span>
-        </div>
+        </Link>
     );
 }
 
