@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -8,6 +8,8 @@ import Logo from "./logo";
 import { useClickOutside } from "../hooks/useClickOutside";
 import HamburgerMenu from "./hamburgerMenu";
 import { cn } from "../lib/utils";
+import { supabase } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 type Page = {
   title: string;
@@ -31,10 +33,15 @@ const pages: Page[] = [
   {
     title: "Community",
     path: "/community-motivation",
-  }
+  },
 ];
 
-function processPage(page: Page, index: number, pathname: string, onClick?: () => void) {
+function processPage(
+  page: Page,
+  index: number,
+  pathname: string,
+  onClick?: () => void
+) {
   return (
     <li key={index} className="px-4 font-montserrat text-[20px]">
       <Link
@@ -46,8 +53,8 @@ function processPage(page: Page, index: number, pathname: string, onClick?: () =
               ? "underline"
               : ""
             : pathname.startsWith(page.path)
-              ? "underline"
-              : ""
+            ? "underline"
+            : ""
         }
       >
         {page.title}
@@ -58,29 +65,78 @@ function processPage(page: Page, index: number, pathname: string, onClick?: () =
 
 export function Navigation() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [profileImage, setProfileImage] = useState(
+    "/assets/palestra-account.png"
+  );
   const hamburgerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        setUser(user);
+        setProfileImage(
+          user.user_metadata?.avatar_url || "/assets/palestra-account.png"
+        );
+      }
+    };
+    getUser();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        const currentUser = session?.user;
+        setUser(currentUser);
+        setProfileImage(
+          currentUser?.user_metadata?.avatar_url ||
+            "/assets/palestra-account.png"
+        );
+      }
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
   const closeDropdown = () => setIsDropdownOpen(false);
 
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    setProfileImage("/assets/palestra-account.png");
+    closeDropdown();
+    router.push("/");
+  };
+
   useClickOutside(hamburgerRef, closeMenu);
   useClickOutside(dropdownRef, closeDropdown);
+
   return (
-    <div ref={hamburgerRef} className="flex relative justify-between text-white items-center p-[20px] bg-brand-dark-background h-[80px]">
+    <div
+      ref={hamburgerRef}
+      className="flex relative justify-between text-white items-center p-[20px] bg-brand-dark-background h-[80px]"
+    >
       <Logo />
-      <ul className="hidden lg:flex justify-center space-x-4">
+      <ul className="hidden lg:flex justify-center items-center space-x-4">
         {pages.map((page, index) => processPage(page, index, pathname))}
         <div ref={dropdownRef} className="relative">
           <Image
-            src={"/assets/palestra-account.png"}
+            src={profileImage}
             width={28}
             height={28}
             alt="Account"
             onClick={toggleDropdown}
+            className="rounded-full cursor-pointer"
           />
           <div
             className={cn(
@@ -93,26 +149,52 @@ export function Navigation() {
             tabIndex={-1}
           >
             <div className="py-1" role="none">
-              <Link
-                href="/login"
-                className="block px-4 py-2 font-montserrat text-brand-text-strong hover:bg-brand-primary"
-                role="menuitem"
-                tabIndex={-1}
-                id="user-menu-item-0"
-                onClick={closeDropdown}
-              >
-                Login
-              </Link>
-              <Link
-                href="/sign-up"
-                className="block px-4 py-2 font-montserrat text-brand-text-strong hover:bg-brand-primary"
-                role="menuitem"
-                tabIndex={-1}
-                id="user-menu-item-1"
-                onClick={closeDropdown}
-              >
-                Sign up
-              </Link>
+              {user ? (
+                <>
+                  <Link
+                    href="/account-settings"
+                    className="block px-4 py-2 font-montserrat text-brand-text-strong hover:bg-brand-primary"
+                    role="menuitem"
+                    tabIndex={-1}
+                    id="user-menu-item-0"
+                    onClick={closeDropdown}
+                  >
+                    Account Settings
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="block w-full text-left px-4 py-2 font-montserrat text-brand-text-strong hover:bg-brand-primary"
+                    role="menuitem"
+                    tabIndex={-1}
+                    id="user-menu-item-1"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className="block px-4 py-2 font-montserrat text-brand-text-strong hover:bg-brand-primary"
+                    role="menuitem"
+                    tabIndex={-1}
+                    id="user-menu-item-0"
+                    onClick={closeDropdown}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href="/sign-up"
+                    className="block px-4 py-2 font-montserrat text-brand-text-strong hover:bg-brand-primary"
+                    role="menuitem"
+                    tabIndex={-1}
+                    id="user-menu-item-1"
+                    onClick={closeDropdown}
+                  >
+                    Sign up
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -128,16 +210,43 @@ export function Navigation() {
         {pages.map((page, index) =>
           processPage(page, index, pathname, closeMenu)
         )}
-        <Link className="px-4 font-montserrat text-[20px]"
-          onClick={closeMenu}
-          href={"/login"}>
-          Login
-        </Link>
-        <Link className="px-4 font-montserrat text-[20px]"
-          onClick={closeMenu}
-          href={"/sign-up"}>
-          Sign up
-        </Link>
+        {user ? (
+          <>
+            <Link
+              className="px-4 font-montserrat text-[20px]"
+              onClick={closeMenu}
+              href={"/account-settings"}
+            >
+              Account
+            </Link>
+            <button
+              onClick={() => {
+                handleSignOut();
+                closeMenu();
+              }}
+              className="px-4 font-montserrat text-[20px] uppercase"
+            >
+              Sign Out
+            </button>
+          </>
+        ) : (
+          <>
+            <Link
+              className="px-4 font-montserrat text-[20px]"
+              onClick={closeMenu}
+              href={"/login"}
+            >
+              Login
+            </Link>
+            <Link
+              className="px-4 font-montserrat text-[20px]"
+              onClick={closeMenu}
+              href={"/sign-up"}
+            >
+              Sign up
+            </Link>
+          </>
+        )}
       </ul>
     </div>
   );
