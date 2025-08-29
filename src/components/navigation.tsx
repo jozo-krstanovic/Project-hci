@@ -10,6 +10,7 @@ import HamburgerMenu from "./hamburgerMenu";
 import { cn } from "../lib/utils";
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import type { User } from "@supabase/supabase-js";
 
 type Page = {
   title: string;
@@ -68,7 +69,7 @@ export function Navigation() {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [profileImage, setProfileImage] = useState(
     "/assets/palestra-account.png"
   );
@@ -92,7 +93,7 @@ export function Navigation() {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         const currentUser = session?.user;
-        setUser(currentUser);
+        setUser(currentUser || null);
         setProfileImage(
           currentUser?.user_metadata?.avatar_url ||
             "/assets/palestra-account.png"

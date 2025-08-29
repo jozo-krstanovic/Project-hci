@@ -5,8 +5,10 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from 'next/navigation';
+import type { User } from "@supabase/supabase-js";
 
 export default function AccountSettingsPage() {
+  const [user, setUser] = useState<User | null>(null);
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -26,7 +28,7 @@ export default function AccountSettingsPage() {
         router.push("/login"); // Redirect to login if not authenticated
         return;
       }
-
+      setUser(user);
       setNickname(user.user_metadata?.full_name || user.email?.split('@')[0] || ""); // Use full_name or part of email
       setEmail(user.email || "");
       setProfileImage(user.user_metadata?.avatar_url || "/assets/palestra-account.png");
@@ -39,12 +41,15 @@ export default function AccountSettingsPage() {
       if (!session) {
         router.push("/login");
       }
+      else if(session.user !== user){
+        setUser(session.user)
+      }
     });
 
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, [router]);
+  }, [router, user]);
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -82,8 +87,8 @@ export default function AccountSettingsPage() {
 
         setProfileImage(publicUrl);
         setMessage("Profile picture updated successfully!");
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err) {
+        setError((err as Error).message);
         console.error("Error uploading profile picture:", err);
       }
     }
@@ -103,8 +108,8 @@ export default function AccountSettingsPage() {
       });
       if (updateError) throw updateError;
       setMessage("Nickname updated successfully!");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError((err as Error).message);
       console.error("Error updating nickname:", err);
     }
   };
@@ -131,8 +136,8 @@ export default function AccountSettingsPage() {
       console.log(data);
       if (updateError) throw updateError;
       setMessage("Email updated successfully! Please check your new email for a confirmation link.");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError((err as Error).message);
       console.error("Error updating email:", err);
     }
   };
@@ -175,8 +180,8 @@ export default function AccountSettingsPage() {
       setNewPassword("");
       setConfirmPassword("");
       setCurrentPassword(""); // Clear current password field as well
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError((err as Error).message);
       console.error("Error updating password:", err);
     }
   };
@@ -196,8 +201,8 @@ export default function AccountSettingsPage() {
                 <Image
                   src={profileImage}
                   alt="Profile Picture"
-                  layout="fill"
-                  objectFit="cover"
+                  fill
+                  style={{objectFit: "cover"}}
                   className="rounded-full"
                 />
               </div>
