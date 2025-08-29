@@ -5,10 +5,8 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from 'next/navigation';
-import type { User } from "@supabase/supabase-js";
 
 export default function AccountSettingsPage() {
-  const [user, setUser] = useState<User | null>(null);
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -28,28 +26,25 @@ export default function AccountSettingsPage() {
         router.push("/login"); // Redirect to login if not authenticated
         return;
       }
-      setUser(user);
       setNickname(user.user_metadata?.full_name || user.email?.split('@')[0] || ""); // Use full_name or part of email
       setEmail(user.email || "");
       setProfileImage(user.user_metadata?.avatar_url || "/assets/palestra-account.png");
     };
 
     getUser();
+  }, [router]);
 
-    // Listen for auth state changes
+  useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
         router.push("/login");
-      }
-      else if(session.user !== user){
-        setUser(session.user)
       }
     });
 
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, [router, user]);
+  }, [router]);
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -103,7 +98,7 @@ export default function AccountSettingsPage() {
     setMessage(null);
     setError(null);
     try {
-      const { data, error: updateError } = await supabase.auth.updateUser({
+      const { error: updateError } = await supabase.auth.updateUser({
         data: { full_name: nickname },
       });
       if (updateError) throw updateError;
@@ -130,10 +125,9 @@ export default function AccountSettingsPage() {
     }
 
     try {
-      const { data, error: updateError } = await supabase.auth.updateUser({
+      const { error: updateError } = await supabase.auth.updateUser({
         email: email,
       });
-      console.log(data);
       if (updateError) throw updateError;
       setMessage("Email updated successfully! Please check your new email for a confirmation link.");
     } catch (err) {
@@ -172,7 +166,7 @@ export default function AccountSettingsPage() {
         return;
       }
 
-      const { data, error: updateError } = await supabase.auth.updateUser({
+      const { error: updateError } = await supabase.auth.updateUser({
         password: newPassword,
       });
       if (updateError) throw updateError;
@@ -202,7 +196,7 @@ export default function AccountSettingsPage() {
                   src={profileImage}
                   alt="Profile Picture"
                   fill
-                  style={{objectFit: "cover"}}
+                  style={{ objectFit: "cover" }}
                   className="rounded-full"
                 />
               </div>
