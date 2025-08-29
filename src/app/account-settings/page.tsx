@@ -1,31 +1,184 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/lib/supabase/client";
+import { useRouter } from 'next/navigation';
 
 export default function AccountSettingsPage() {
-  const [nickname, setNickname] = useState("current_user_nickname"); // Placeholder for nickname
-  const [email, setEmail] = useState("user@example.com"); // Placeholder for email
+  const [nickname, setNickname] = useState("");
+  const [email, setEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [profileImage, setProfileImage] = useState("/assets/palestra-account.png");
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        router.push("/login"); // Redirect to login if not authenticated
+        return;
+      }
+
+      setNickname(user.user_metadata?.full_name || user.email?.split('@')[0] || ""); // Use full_name or part of email
+      setEmail(user.email || "");
+      setProfileImage(user.user_metadata?.avatar_url || "/assets/palestra-account.png");
+    };
+
+    getUser();
+
+    // Listen for auth state changes
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        router.push("/login");
+      }
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, [router]);
+
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setError("You must be logged in to upload a profile picture.");
+        return;
+      }
+
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}.${fileExt}`;
+      const filePath = `${user.id}/${fileName}`;
+
+      try {
+        const { error: uploadError } = await supabase.storage
+          .from('profile-pictures')
+          .upload(filePath, file, { upsert: true });
+
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('profile-pictures')
+          .getPublicUrl(filePath);
+
+        const { error: updateUserError } = await supabase.auth.updateUser({
+          data: { avatar_url: publicUrl },
+        });
+
+        if (updateUserError) {
+          throw updateUserError;
+        }
+
+        setProfileImage(publicUrl);
+        setMessage("Profile picture updated successfully!");
+      } catch (err: any) {
+        setError(err.message);
+        console.error("Error uploading profile picture:", err);
+      }
     }
   };
 
   const handleUploadClick = () => {
     fileInputRef.current?.click();
+  };
+
+  const handleSaveNickname = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setMessage(null);
+    setError(null);
+    try {
+      const { data, error: updateError } = await supabase.auth.updateUser({
+        data: { full_name: nickname },
+      });
+      if (updateError) throw updateError;
+      setMessage("Nickname updated successfully!");
+    } catch (err: any) {
+      setError(err.message);
+      console.error("Error updating nickname:", err);
+    }
+  };
+
+  const handleSaveEmail = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setMessage(null);
+    setError(null);
+
+    if (!email) {
+      setError("Email cannot be empty.");
+      return;
+    }
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    if (!emailRegex.test(email)) {
+      setError("Invalid email format.");
+      return;
+    }
+
+    try {
+      const { data, error: updateError } = await supabase.auth.updateUser({
+        email: email,
+      });
+      console.log(data);
+      if (updateError) throw updateError;
+      setMessage("Email updated successfully! Please check your new email for a confirmation link.");
+    } catch (err: any) {
+      setError(err.message);
+      console.error("Error updating email:", err);
+    }
+  };
+
+  const handleChangePassword = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setMessage(null);
+    setError(null);
+
+    if (!currentPassword) {
+      setError("Current password is required.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setError("New passwords do not match.");
+      return;
+    }
+    if (!newPassword) {
+      setError("New password cannot be empty.");
+      return;
+    }
+
+    try {
+      // Verify current password by trying to sign in
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: currentPassword,
+      });
+
+      if (signInError) {
+        setError("Invalid current password.");
+        return;
+      }
+
+      const { data, error: updateError } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+      if (updateError) throw updateError;
+      setMessage("Password updated successfully!");
+      setNewPassword("");
+      setConfirmPassword("");
+      setCurrentPassword(""); // Clear current password field as well
+    } catch (err: any) {
+      setError(err.message);
+      console.error("Error updating password:", err);
+    }
   };
 
   return (
@@ -67,7 +220,7 @@ export default function AccountSettingsPage() {
             </div>
 
             {/* Nickname Form */}
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSaveNickname}>
               <div>
                 <label htmlFor="nickname" className="block text-sm font-medium text-card-foreground">Nickname</label>
                 <input
@@ -89,7 +242,7 @@ export default function AccountSettingsPage() {
           {/* Contact Information Section */}
           <div className="bg-card border border-border rounded-xl shadow-md p-8">
             <h2 className="text-2xl font-bold mb-6 text-card-foreground">Contact Information</h2>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSaveEmail}>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-card-foreground">Email</label>
                 <input
@@ -112,7 +265,7 @@ export default function AccountSettingsPage() {
         {/* Right Column - Security Section */}
         <div className="bg-card border border-border rounded-xl shadow-md p-8 lg:row-span-2">
           <h2 className="text-2xl font-bold mb-6 text-card-foreground">Security Settings</h2>
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleChangePassword}>
             <div>
               <label htmlFor="currentPassword" className="block text-sm font-medium text-card-foreground">Current Password</label>
               <input
@@ -151,6 +304,8 @@ export default function AccountSettingsPage() {
           </form>
         </div>
       </div>
+      {message && <p className="mt-4 text-green-500 text-center">{message}</p>}
+      {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
     </div>
   );
 }
