@@ -71,7 +71,7 @@ export default function WorkoutProgramPage({ params }: { params: Promise<{ id: s
             <div>
               <h2 className="text-3xl font-bold text-card-foreground">Program Assets</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-                {/* @ts-ignore: Contentful fields typing cannot be inferred correctly */}
+                {/* @ts-expect-error: Contentful fields typing cannot be inferred correctly */}
                 {program.programAssets && program.programAssets?.map((asset: any) => (
                   <div key={asset.sys.id} title={asset.fields.title || asset.fields.file.fileName} className="border rounded-lg relative">
                     <a href={`https://` + asset.fields.file.url} target="_blank" rel="noopener noreferrer" >
