@@ -12,6 +12,7 @@ interface WorkoutProgram {
   };
   fields: {
     programName: string;
+    // @ts-ignore: Contentful fields typing cannot be inferred correctly
     programInformation: any;
     programImage: {
       fields: {
@@ -22,6 +23,7 @@ interface WorkoutProgram {
     };
   };
 }
+
 
 export default function WorkoutProgramsPage() {
   const [programs, setPrograms] = useState<WorkoutProgram[]>([]);

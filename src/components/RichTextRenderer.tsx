@@ -2,13 +2,13 @@ import React from 'react';
 
 export interface RichTextDocument {
   nodeType: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   content: RichTextNode[];
 }
 
 interface RichTextNode {
   nodeType: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   content?: RichTextNode[];
   value?: string;
   marks?: { type: string }[];
