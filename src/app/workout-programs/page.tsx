@@ -12,7 +12,7 @@ interface WorkoutProgram {
   };
   fields: {
     programName: string;
-    // @ts-expect-error: Contentful fields typing cannot be inferred correctly
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     programInformation: any;
     programImage: {
       fields: {
