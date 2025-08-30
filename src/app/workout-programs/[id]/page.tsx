@@ -58,9 +58,9 @@ export default function WorkoutProgramPage({ params }: { params: Promise<{ id: s
   return (
     <main className="bg-background px-4 sm:px-10 md:px-[178px] py-10">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl mx-auto">
-        <div className="bg-card border border-border rounded-xl shadow-md p-8">
+        <div className="bg-card border border-border rounded-xl shadow-md p-8 flex flex-col">
           <h1 className="text-6xl font-extrabold tracking-tight text-card-foreground">{program.fields.programName}</h1>
-          <div className="mt-10 text-muted-foreground">
+          <div className="mt-10 text-muted-foreground flex-grow">
             {documentToReactComponents(program.fields.programInformation)}
           </div>
           <div className="mt-auto pt-4">
@@ -83,20 +83,29 @@ export default function WorkoutProgramPage({ params }: { params: Promise<{ id: s
             <h2 className="text-3xl font-bold text-card-foreground">Program Assets</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
               {program.fields.programAssets && program.fields.programAssets.map((asset: any) => (
-                <a href={`https:${asset.fields.file.url}`} target="_blank" rel="noopener noreferrer" key={asset.sys.id} className="border rounded-lg p-4 flex flex-col items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200">
-                  {asset.fields.file.contentType.startsWith("image") ? (
-                    <Image
-                      src={`https:${asset.fields.file.url}`}
-                      alt={asset.fields.title || asset.fields.file.fileName}
-                      width={100}
-                      height={100}
-                      className="rounded-lg"
-                    />
-                  ) : (
-                    <FileIcon />
-                  )}
-                  <span className="mt-2 text-center text-muted-foreground">{asset.fields.title || asset.fields.file.fileName}</span>
-                </a>
+                <div key={asset.sys.id} title={asset.fields.title || asset.fields.file.fileName} className="border rounded-lg relative">
+                  <a href={`https://` + asset.fields.file.url} target="_blank" rel="noopener noreferrer" >
+                    <div className="h-3/5 w-full flex items-center justify-center">
+                      {asset.fields.file.contentType.startsWith("image") ? (
+                        <Image
+                          src={`https:${asset.fields.file.url}`}
+                          alt={asset.fields.title || asset.fields.file.fileName}
+                          width={100}
+                          height={100}
+                          className="rounded-t-lg"
+                        />
+                      ) : (
+                        <FileIcon width="30px" height="30px" />
+                      )}
+                    </div>
+                    <div className="h-2/5 w-full border-t border-border p-2 flex items-center justify-center">
+                      <span className="text-center text-muted-foreground line-clamp-2">{asset.fields.title || asset.fields.file.fileName}.{asset.fields.file.fileName.split('.').pop()}</span>
+                    </div>
+                  </a>
+                  <a href={`/api/download?url=https:${asset.fields.file.url}`} download className="absolute top-0 right-0 bg-white rounded-bl-lg p-1 shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                  </a>
+                </div>
               ))}
             </div>
           </div>
