@@ -45,18 +45,18 @@ export default function WorkoutProgramsPage() {
 
   return (
     <main className="bg-background px-4 sm:px-10 md:px-[178px] py-10">
-      <div className="w-full max-w-6xl mx-auto">
+      <div className="w-full max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between">
         <input
           type="text"
           placeholder="Search for a workout program..."
-          className="w-full p-4 border rounded-lg bg-input border-border focus:ring-ring focus:border-ring"
+          className="w-full sm:w-auto p-4 border rounded-lg bg-input border-border focus:ring-ring focus:border-ring"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-      </div>
-      <div className="flex justify-end w-full max-w-6xl mt-4 mx-auto">
-        <Button variant="outline" onClick={() => setViewMode("card")} className={viewMode === 'card' ? 'bg-gray-200' : ''}>Card View</Button>
-        <Button variant="outline" onClick={() => setViewMode("list")} className={viewMode === 'list' ? 'bg-gray-200' : ''}>List View</Button>
+        <div className="flex mt-4 sm:mt-0">
+          <Button variant="outline" onClick={() => setViewMode("card")} className={viewMode === 'card' ? 'bg-gray-200' : ''}>Card View</Button>
+          <Button variant="outline" onClick={() => setViewMode("list")} className={viewMode === 'list' ? 'bg-gray-200' : ''}>List View</Button>
+        </div>
       </div>
       <div className="w-full max-w-6xl mx-auto mt-10">
         {viewMode === "card" ? (
@@ -87,7 +87,7 @@ export default function WorkoutProgramsPage() {
           <div className="w-full">
             {filteredPrograms.map((program) => (
               <Link href={`/workout-programs/${program.sys.id}`} key={program.sys.id}>
-                <div className="bg-card border border-border rounded-xl shadow-md p-4 mb-4 flex justify-between items-center">
+                <div className="bg-card border border-border rounded-xl shadow-md p-4 mb-4 flex flex-col sm:flex-row justify-between items-center">
                   <div className="flex items-center">
                     {program.fields.programImage && (
                       <Image
@@ -98,7 +98,7 @@ export default function WorkoutProgramsPage() {
                         className="rounded-lg"
                       />
                     )}
-                    <div className="ml-4">
+                    <div className="ml-0 sm:ml-4 mt-4 sm:mt-0">
                       <h2 className="text-2xl font-bold text-card-foreground">{program.fields.programName}</h2>
                       <p className="mt-2 text-muted-foreground line-clamp-2">
                         {/* This will not render rich text, but plain text. For rich text, we need to use a different approach */}
@@ -106,7 +106,7 @@ export default function WorkoutProgramsPage() {
                       </p>
                     </div>
                   </div>
-                  <div className="mt-4">
+                  <div className="mt-4 sm:mt-0">
                     <Button className="bg-white text-black border-[3px] border-black font-bold hover:bg-black hover:text-white hover:border-white transition-colors duration-200 h-[56px] px-[30px] py-[15px]">Apply Now</Button>
                   </div>
                 </div>
