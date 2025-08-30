@@ -31,6 +31,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preload" href="/assets/hero-image.jpg" as="image" />
+      </head>
       <body
         className={`${ubuntu.variable} ${montserrat.variable} antialiased w-full max-w-screen`}
       >
