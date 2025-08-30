@@ -2,7 +2,6 @@
 
 import { useState, useEffect, use } from "react";
 import { contentfulClient } from "@/lib/contentful/client";
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import Image from "next/image";
 
 import { FileIcon } from "@/components/fileIcon";
@@ -107,8 +106,8 @@ export default function WorkoutProgramPage({ params }: { params: Promise<{ id: s
             <h2 className="text-3xl font-bold text-card-foreground">Description</h2>
             <div className="border-t border-border my-4"></div>
             <div className="mt-10 text-muted-foreground flex-grow h-96 overflow-y-auto">
-              {documentToReactComponents(program.fields.programInformation)}
-            </div>
+            {program.fields.programInformation.content[0].content[0].value}
+          </div>
             <div className="mt-auto pt-4">
               <Button className="bg-white text-black border-[3px] border-black font-bold hover:bg-black hover:text-white hover:border-white transition-colors duration-200 h-[56px] px-[30px] py-[15px]">Apply Now</Button>
             </div>
