@@ -33,7 +33,7 @@ export default function WorkoutProgramsPage() {
       const response = await contentfulClient.getEntries({
         content_type: "workoutProgram",
       });
-      setPrograms(response.items as any as WorkoutProgram[]);
+      setPrograms(response.items as unknown as WorkoutProgram[]);
     };
 
     fetchPrograms();
@@ -70,7 +70,7 @@ export default function WorkoutProgramsPage() {
                         src={`https:${program.fields.programImage.fields.file.url}`}
                         alt={program.fields.programName}
                         fill
-                        style={{objectFit: "cover"}}
+                        style={{ objectFit: "cover" }}
                         className="rounded-lg"
                       />
                     )}

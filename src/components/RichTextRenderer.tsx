@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface RichTextDocument {
+export interface RichTextDocument {
   nodeType: string;
   data: Record<string, any>;
   content: RichTextNode[];
