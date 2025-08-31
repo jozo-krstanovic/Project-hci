@@ -1,12 +1,11 @@
 import { redirect } from "next/navigation";
-import { getWorkoutProgram } from "@/app/api/get-workout-programs/route";
+import { getWorkoutProgram } from "@/app/api/get-workout-programs/endpoints";
 import { TypeWorkoutProgram } from "../../../../../../content-manual-types";
 import EditWorkoutProgramForm from "./EditWorkoutProgramForm";
 import { authGuard } from "@/app/admin/supabaseClient";
-import { use } from "react";
 
 export default async function EditWorkoutProgramPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+  const { id } = await params;
   let program: TypeWorkoutProgram<"WITHOUT_UNRESOLVABLE_LINKS">["fields"] | null = null;
 
   try {

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import DeleteProgramButton from "./DeleteProgramButton";
 import { getSupabaseClient } from "../supabaseClient";
-import { getWorkoutPrograms } from "@/app/api/get-workout-programs/route";
+import { getWorkoutPrograms } from "@/app/api/get-workout-programs/endpoints";
 import { TypeWorkoutProgram } from "../../../../content-manual-types";
 
 export default async function AdminWorkoutProgramsPage() {
