@@ -4,8 +4,8 @@ import { TypeWorkoutProgram } from "../../../../../../content-manual-types";
 import EditWorkoutProgramForm from "./EditWorkoutProgramForm";
 import { authGuard } from "@/app/admin/supabaseClient";
 
-export default async function EditWorkoutProgramPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function EditWorkoutProgramPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   let program: TypeWorkoutProgram<"WITHOUT_UNRESOLVABLE_LINKS">["fields"] | null = null;
 
   try {
