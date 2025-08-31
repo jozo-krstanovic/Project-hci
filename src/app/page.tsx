@@ -9,7 +9,7 @@ export default function LandingPage() {
     <>
       {/* Hero Section */}
       <section className="relative w-full px-6 md:px-24 py-20 md:py-40 font-montserrat">
-        <div className="absolute inset-0 bg-[url('/assets/hero-image.jpg')] bg-cover bg-center" />
+        <div className="absolute inset-0 bg-[url('/assets/hero-image-compressed.webp')] bg-cover bg-center" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/80" />
 
         <div className="relative max-w-4xl mx-auto text-center md:text-left text-white space-y-6">

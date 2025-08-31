@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="preload" href="/assets/hero-image.jpg" as="image" />
+        <link rel="preload" fetchPriority="high" href="/assets/hero-image-compressed.webp" as="image" />
       </head>
       <body
         className={`${ubuntu.variable} ${montserrat.variable} antialiased w-full max-w-screen`}
