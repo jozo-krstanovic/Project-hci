@@ -15,6 +15,12 @@ export interface IWorkoutProgramFields {
 
   /** Program Assets */
   programAssets?: Asset[] | undefined;
+
+  difficulty?: string | undefined;
+
+  level?: string | undefined;
+
+  duration?: number | undefined;
 }
 
 export interface IWorkoutProgram extends Entry<IWorkoutProgramFields> {

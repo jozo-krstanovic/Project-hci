@@ -10,6 +10,9 @@ export interface TypeWorkoutProgramFields {
     programInformation: EntryFieldTypes.RichText;
     programImage: EntryFieldTypes.AssetLink;
     programAssets: EntryFieldTypes.Array<EntryFieldTypes.AssetLink>;
+    difficulty: EntryFieldTypes.Symbol;
+    level: EntryFieldTypes.Symbol;
+    duration: EntryFieldTypes.Integer;
 }
 
 export type TypeWorkoutProgramSkeleton = EntrySkeletonType<TypeWorkoutProgramFields, "workoutProgram">;

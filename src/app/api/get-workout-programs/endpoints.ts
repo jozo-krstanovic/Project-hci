@@ -11,7 +11,7 @@ export const getWorkoutPrograms = unstable_cache(async () => {
     // for more information on "withoutUnresolvableLinks".
     const data = await contentfulClient.withoutUnresolvableLinks.getEntries<TypeWorkoutProgramSkeleton>({
         content_type: 'workoutProgram',
-        select: ['fields.programName', 'fields.programInformation', 'fields.programImage', 'fields.programAssets', 'sys.id'],
+        select: ['fields.programName', 'fields.programInformation', 'fields.programImage', 'fields.programAssets', 'fields.difficulty', 'fields.level', 'fields.duration', 'sys.id'],
         order: ['fields.programName']
     });
 

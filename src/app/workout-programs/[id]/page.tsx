@@ -20,7 +20,6 @@ export default function WorkoutProgramPage({ params }: { params: Promise<{ id: s
       const workoutProgram = response as IWorkoutProgram;
       setProgram(workoutProgram.fields as IWorkoutProgramFields);
     };
-
     fetchProgram();
   }, [id]);
 
@@ -50,10 +49,11 @@ export default function WorkoutProgramPage({ params }: { params: Promise<{ id: s
   return (
     <main className="bg-background px-4 sm:px-10 md:px-[178px] py-10 font-montserrat">
       <Link href="/workout-programs">
-        <Button className="bg-brand-primary text-black font-bold rounded-lg h-14 px-6 py-3 shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300 mb-8">
+        <Button variant={"outline"} className="bg-brand-primary text-black font-bold rounded-lg h-14 px-6 py-3 shadow-lg hover:text-white hover:bg-black hover:border-black mb-8">
           &larr; Back to Programs
         </Button>
       </Link>
+
       <div className="bg-card border border-border rounded-2xl shadow-lg p-8 flex flex-col lg:flex-row gap-8">
         {/* Image Section */}
         {program.programImage && (
@@ -67,24 +67,41 @@ export default function WorkoutProgramPage({ params }: { params: Promise<{ id: s
             />
           </div>
         )}
+
         {/* Description + Name Section */}
         <div className="w-full lg:w-1/2 flex flex-col max-h-[600px]">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-card-foreground mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-card-foreground mb-4">
             {program.programName}
           </h1>
+
+          {/* New Program Info Section */}
+          <div className="flex flex-wrap gap-4 mb-6">
+            {program.difficulty && (
+              <span className="px-4 py-2 bg-indigo-100 text-indigo-800 rounded-full text-sm font-semibold">
+                Difficulty: {program.difficulty}
+              </span>
+            )}
+            {program.level && (
+              <span className="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
+                Level: {program.level}
+              </span>
+            )}
+            {program.duration && (
+              <span className="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
+                Duration: {program.duration}
+              </span>
+            )}
+          </div>
+
           <h2 className="text-2xl sm:text-3xl font-bold text-card-foreground mb-4">Description</h2>
           <div className="border-t border-border mb-4"></div>
           <div className="mt-4 flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-brand-primary scrollbar-track-gray-200 p-2 rounded-md">
             <RichTextRenderer document={program.programInformation} />
           </div>
-          <div className="mt-4 pt-4">
-            <Button className="bg-brand-primary text-black font-bold rounded-lg h-14 px-6 py-3 shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300">
-              Apply Now
-            </Button>
-          </div>
         </div>
       </div>
-      {/* Program Assets Section Below on All Screens */}
+
+      {/* Program Assets Section */}
       {program.programAssets && program.programAssets.length > 0 && (
         <div className="mt-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-card-foreground mb-4">Program Assets</h2>

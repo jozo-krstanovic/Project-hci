@@ -38,12 +38,15 @@ export async function PUT(request: Request) {
 
     const programId = formData.get('programId') as string;
     const programName = formData.get('programName') as string;
+    const difficulty = formData.get('difficulty') as string;
+    const level = formData.get('level') as string;
+    const duration = formData.get('duration') as string;
     const programInformationText = formData.get('programInformation') as string;
     const programImageFile = formData.get('programImage') as File | null;
     const programAssetsFiles = formData.getAll('programAssets') as File[];
 
-    if (!programId || !programName || !programInformationText) {
-      return NextResponse.json({ error: 'Program ID, name, and information are required.' }, { status: 400 });
+    if (!programId || !programName || !programInformationText || !programImageFile) {
+      return NextResponse.json({ error: 'Program ID, name, information and image are required.' }, { status: 400 });
     }
 
     const contentfulManagementToken = process.env.CONTENTFUL_MANAGEMENT_TOKEN;
@@ -68,6 +71,10 @@ export async function PUT(request: Request) {
 
     // Update programInformation
     entry.fields.programInformation['en-US'] = convertPlainTextToRichText(programInformationText);
+
+    entry.fields.difficulty['en-US'] = difficulty;
+    entry.fields.level['en-US'] = level;
+    entry.fields.duration['en-US'] = Number(duration);
 
     // Handle programImage update
     if (programImageFile) {
