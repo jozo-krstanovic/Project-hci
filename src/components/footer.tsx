@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Logo from "./logo";
 import Image from "next/image";
 
@@ -15,10 +16,10 @@ export default function Footer() {
         <div className="w-full sm:w-[300px] mx-[10px] my-4">
           <h2 className="text-[28px]">Sitemap</h2>
           <div className="flex flex-col">
-            <span className="font-montserrat text-[16px]">Progress</span>
-            <span className="font-montserrat text-[16px]">Programs</span>
-            <span className="font-montserrat text-[16px]">Health & Wellness</span>
-            <span className="font-montserrat text-[16px]">Community</span>
+            <Link href="/workout-programs" className="font-montserrat text-[16px]">Programs</Link>
+            <Link href="/community-motivation" className="font-montserrat text-[16px]">Community</Link>
+            <Link href="/account-settings" className="font-montserrat text-[16px]">Account Settings</Link>
+
           </div>
         </div>
         <div className="w-full sm:w-[300px] mx-[10px] my-4">

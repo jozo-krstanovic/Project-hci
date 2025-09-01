@@ -6,6 +6,7 @@ import DeleteProgramButton from "./DeleteProgramButton";
 import { getSupabaseClient } from "../supabaseClient";
 import { getWorkoutPrograms } from "@/app/api/get-workout-programs/endpoints";
 import { TypeWorkoutProgram } from "../../../../content-manual-types";
+import { Plus } from "lucide-react";
 
 export default async function AdminWorkoutProgramsPage() {
   const supabase = await getSupabaseClient();
@@ -30,12 +31,12 @@ export default async function AdminWorkoutProgramsPage() {
   return (
     <main className="bg-background px-4 sm:px-10 md:px-[178px] py-10">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-card-foreground">
-          Admin Workout Programs
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-card-foreground">
+          Admin Content Control:
         </h1>
         <Link href="/admin/add-workout-program">
-          <Button className="bg-brand-primary text-black font-bold py-3 px-6 rounded-lg shadow hover:scale-105 hover:shadow-xl transition-transform duration-300">
-            Add New Program
+          <Button variant={"outline"} size={"lg"} className="font-montserrat bg-brand-primary text-black font-bold py-3 pl-3 pr-6 rounded-lg shadow hover:text-white hover:bg-black hover:border-black">
+            <Plus className="mr-2" />Add New Program
           </Button>
         </Link>
       </div>
@@ -59,7 +60,7 @@ export default async function AdminWorkoutProgramsPage() {
             </h2>
             <div className="flex mt-auto pt-4 gap-4">
               <Link href={`/admin/workout-programs/${program.sys.id}/edit`}>
-                <Button className="bg-white text-black border border-black font-bold rounded-lg px-6 py-3 shadow hover:scale-105 hover:shadow-xl transition-transform duration-300">
+                <Button className="bg-white text-black border border-black font-bold rounded-lg px-6 py-3 shadow hover:text-white hover:bg-black hover:border-black">
                   Edit
                 </Button>
               </Link>

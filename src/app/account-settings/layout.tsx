@@ -4,6 +4,6 @@ export default function AccountSettingsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main>{children}</main>
+    <main className="my-8">{children}</main>
   );
 }
