@@ -33,31 +33,39 @@ export default function SignupPage() {
         },
       });
 
+      if (data.user === null) {
+        setError("Sign-up failed. Please try again.");
+      }
+
       if (authError) {
         setError(authError.message);
         console.error("Supabase sign-up error:", authError);
         return;
       }
 
+      // 2. Insert profile and wait until it's done
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .insert({
+          id: data.user?.id,
+          username: fullName || "New User",
+          role: "user",
+        })
+        .maybeSingle();
+
+      if (profileError) {
+        console.error("Profile insert failed:", profileError);
+        if (data.user)
+          await supabase.auth.admin.deleteUser(data.user.id); // optional cleanup
+        throw profileError;
+      }
+
       if (data.user) {
         console.log("Sign-up successful, user:", data.user);
+        router.push("/");
 
-        // Insert into profiles table
-        const { error: profileError } = await supabase
-          .from("profiles")
-          .insert({
-            id: data.user.id,       // Use Supabase auth user ID
-            username: fullName,     // Or you can create a separate username field
-            role: "user",           // Default role
-          });
-
-        if (profileError) {
-          console.error("Error creating profile:", profileError);
-          // Optional: handle cleanup, e.g., delete the auth user if profile fails
-        }
         // Supabase often requires email confirmation, so a redirect to a confirmation page
         // or a message to check email might be appropriate here.
-        router.push("/login?message=Check your email for a confirmation link!");
       } else if (data.session === null) {
         // This case happens if email confirmation is required
         router.push("/login?message=Please check your email to confirm your account.");
