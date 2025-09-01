@@ -41,6 +41,20 @@ export default function SignupPage() {
 
       if (data.user) {
         console.log("Sign-up successful, user:", data.user);
+
+        // Insert into profiles table
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .insert({
+            id: data.user.id,       // Use Supabase auth user ID
+            username: fullName,     // Or you can create a separate username field
+            role: "user",           // Default role
+          });
+
+        if (profileError) {
+          console.error("Error creating profile:", profileError);
+          // Optional: handle cleanup, e.g., delete the auth user if profile fails
+        }
         // Supabase often requires email confirmation, so a redirect to a confirmation page
         // or a message to check email might be appropriate here.
         router.push("/login?message=Check your email for a confirmation link!");
@@ -56,7 +70,7 @@ export default function SignupPage() {
   };
 
   return (
-    <main className="flex flex-col bg-[#ededed] px-4 py-8">
+    <main className="flex flex-col bg-[#ededed] px-4 py-36">
       {/* Card */}
       <div className="bg-background w-full max-w-lg lg:max-w-xl border rounded-xl shadow-md p-10 mx-auto my-auto">
 
@@ -70,28 +84,28 @@ export default function SignupPage() {
           <input
             type="text"
             placeholder="Full Name"
-            className="w-full p-4 border border-black rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full p-4 border border-black rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black font-montserrat"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
           />
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-4 border border-black rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full p-4 border border-black rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black font-montserrat"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <input
             type="password"
             placeholder="Password"
-            className="w-full p-4 border border-black rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full p-4 border border-black rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black font-montserrat"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <input
             type="password"
             placeholder="Confirm Password"
-            className="w-full p-4 border border-black rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full p-4 border border-black rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black font-montserrat"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
