@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { X, ArrowBigLeft } from "lucide-react"; // Make sure lucide-react is installed
 import type { TypeWorkoutProgram } from "../../../../../../content-manual-types";
+import Select, { SingleValue } from "react-select";
+import { difficultyOptions, levelOptions, customStyles, Option } from "../../../options";
 
 interface EditWorkoutProgramFormProps {
   program: TypeWorkoutProgram<"WITHOUT_UNRESOLVABLE_LINKS">["fields"];
@@ -27,11 +29,15 @@ export default function EditWorkoutProgramForm({ program, programId }: EditWorko
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [dragActive, setDragActive] = useState(false);
+  const [difficulty, setDifficulty] = useState(program.difficulty); // NEW
+  const [level, setLevel] = useState(program.level);           // NEW
+  const [duration, setDuration] = useState<string>(program.duration.toString());     // NEW
+  const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
+    setIsMounted(true);
     if (program.programInformation) {
-      console.log(program.programInformation);
       const plainText = program.programInformation.content
         .map((node) =>
           node.nodeType === "paragraph" && node.content
@@ -60,15 +66,39 @@ export default function EditWorkoutProgramForm({ program, programId }: EditWorko
     }
   }, [program]);
 
+  const handleChange = (selected: SingleValue<Option>, isDifficulty: boolean) => {
+    if (selected) {
+      if (isDifficulty)
+        setDifficulty(selected.value);
+      else
+        setLevel(selected.value);
+    }
+    else
+      if (isDifficulty)
+        setDifficulty("");
+      else
+        setLevel("");
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
+    if (!programName || !programInformation || !programImage) {
+      setMessage("Please fill in all required fields.");
+      setLoading(false);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("programId", programId);
     formData.append("programName", programName);
     formData.append("programInformation", programInformation);
+
+    if (difficulty) formData.append("difficulty", difficulty); // NEW
+    if (level) formData.append("level", level);           // NEW
+    if (duration) formData.append("duration", duration);     // NEW
 
     if (programImage) formData.append("programImage", programImage);
 
@@ -126,20 +156,22 @@ export default function EditWorkoutProgramForm({ program, programId }: EditWorko
           <Button
             variant="outline"
             onClick={() => router.push("/admin/workout-programs")}
-            className="bg-brand-primary text-black font-bold rounded-lg h-14 px-4 py-3 shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
+            className="group bg-brand-primary text-black font-bold rounded-lg h-14 px-4 py-3 shadow-lg hover:text-white hover:bg-black hover:border-black"
           >
-            <ArrowBigLeft className="text-black mr-[9px]" />Back
+            <ArrowBigLeft className="text-black mr-[9px] group-hover:text-white" />Cancel
           </Button>
-          <h1 className="text-4xl font-bold text-center flex-1">Edit Workout Program</h1>
+          <h1 className="text-4xl flex-grow font-bold text-center flex-1">Edit Workout Program</h1>
         </div>
 
         <form
           onSubmit={handleSubmit}
           className="bg-card border border-border rounded-2xl shadow-lg p-8 w-full flex flex-col gap-6"
         >
+          <span className=" text-black text-sm text-muted">Fields marked with <b>*</b> are required</span>
+
           {/* Program Name */}
           <div>
-            <label className="block font-bold mb-2">Program Name:</label>
+            <label className="block font-bold mb-2">Program Name*</label>
             <input
               type="text"
               value={programName}
@@ -149,9 +181,48 @@ export default function EditWorkoutProgramForm({ program, programId }: EditWorko
             />
           </div>
 
+          {/* Difficulty / Level / Duration */}
+          {isMounted && <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="mb-6">
+              <label className="block text-sm font-bold mb-2">Difficulty</label>
+              <Select
+                options={difficultyOptions}
+                value={difficulty ? { value: difficulty, label: difficulty } : null}
+                onChange={(option) => handleChange(option as SingleValue<Option>, true)}
+                isClearable
+                styles={customStyles}
+                placeholder="Select Difficulty..."
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-bold mb-2">Difficulty</label>
+              <Select
+                options={levelOptions}
+                value={level ? { value: level, label: level } : null}
+                onChange={(option) => handleChange(option as SingleValue<Option>, false)}
+                isClearable
+                styles={customStyles}
+                placeholder="Select Level..."
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold mb-2">Duration</label>
+              <input
+                type="number"
+                className="w-full h-[42px] border border-border rounded-lg px-4 py-3 text-card-foreground focus:ring-2 focus:ring-brand-primary focus:outline-none"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                placeholder="Up to 180 minutes"
+                min={1}
+                max={180}
+              />
+            </div>
+          </div>
+          }
+
           {/* Program Information */}
           <div>
-            <label className="block font-bold mb-2">Program Information (Rich Text JSON):</label>
+            <label className="block font-bold mb-2">Program Information* (Rich Text JSON):</label>
             <textarea
               value={programInformation}
               onChange={(e) => setProgramInformation(e.target.value)}
@@ -179,7 +250,7 @@ export default function EditWorkoutProgramForm({ program, programId }: EditWorko
             }}
             className={`block border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${dragActive ? "border-brand-primary bg-gray-50" : "border-border"} mb-6`}
           >
-            <span className="block text-sm font-bold mb-2">Program Image</span>
+            <span className="block text-sm font-bold mb-2">Program Image*</span>
             <input
               type="file"
               id="programImage"

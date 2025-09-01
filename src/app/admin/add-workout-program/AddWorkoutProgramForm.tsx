@@ -3,7 +3,9 @@
 import { useState, DragEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { X, FileText, FileArchive, FileCode } from "lucide-react";
+import { X, FileText, FileArchive, FileCode, ArrowBigLeft } from "lucide-react";
+import Select, { SingleValue } from "react-select";
+import { difficultyOptions, levelOptions, customStyles, Option } from "../options";
 
 export default function AddWorkoutProgramForm() {
   const [programName, setProgramName] = useState("");
@@ -15,10 +17,15 @@ export default function AddWorkoutProgramForm() {
   const [dragActive, setDragActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [difficulty, setDifficulty] = useState(""); // NEW
+  const [level, setLevel] = useState("");           // NEW
+  const [duration, setDuration] = useState("");     // NEW
+  const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
 
   // Generate preview when program image changes
   useEffect(() => {
+    setIsMounted(true);
     if (programImage) {
       const objectUrl = URL.createObjectURL(programImage);
       setProgramImagePreview(objectUrl);
@@ -61,6 +68,20 @@ export default function AddWorkoutProgramForm() {
     }
   };
 
+  const handleChange = (selected: SingleValue<Option>, isDifficulty: boolean) => {
+    if (selected) {
+      if (isDifficulty)
+        setDifficulty(selected.value);
+      else
+        setLevel(selected.value);
+    }
+    else
+      if (isDifficulty)
+        setDifficulty("");
+      else
+        setLevel("");
+  }
+
   const removeAsset = (index: number) => {
     setProgramAssets((prev) => prev.filter((_, i) => i !== index));
   };
@@ -70,9 +91,20 @@ export default function AddWorkoutProgramForm() {
     setLoading(true);
     setMessage("");
 
+    if (!programName || !programInformation || !programImage) {
+      setMessage("Please fill in all required fields.");
+      setLoading(false);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("programName", programName);
     formData.append("programInformation", programInformation);
+
+    if (difficulty) formData.append("difficulty", difficulty); // NEW
+    if (level) formData.append("level", level);           // NEW
+    if (duration) formData.append("duration", duration);     // NEW
+
     if (programImage) formData.append("programImage", programImage);
     if (programAssets.length > 0) {
       for (let i = 0; i < programAssets.length; i++) {
@@ -91,6 +123,9 @@ export default function AddWorkoutProgramForm() {
       if (response.ok) {
         setMessage("Workout program added successfully!");
         setProgramName("");
+        setDifficulty(""); // reset
+        setLevel("");      // reset
+        setDuration("");   // reset
         setProgramInformation("");
         setProgramImage(null);
         setProgramAssets([]);
@@ -117,18 +152,26 @@ export default function AddWorkoutProgramForm() {
 
   return (
     <main className="bg-background min-h-screen grid place-items-center px-4 sm:px-10 font-montserrat">
-      <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-card-foreground mb-10">
-        Add New Workout Program
-      </h1>
+      <div className="flex w-full max-w-3xl justify-between items-center mb-6">
+        <Button
+          variant="outline"
+          onClick={() => router.push("/admin/workout-programs")}
+          className="group bg-brand-primary text-black font-bold rounded-lg h-14 px-4 py-3 shadow-lg hover:text-white hover:bg-black hover:border-black"
+        >
+          <ArrowBigLeft className="text-black mr-[9px] group-hover:text-white" />Cancel
+        </Button>
+        <h1 className="text-4xl flex-grow font-bold text-center flex-1">Add Workout Program</h1>
+      </div>
       <div>
         <form
           onSubmit={handleSubmit}
           className="bg-card border border-border rounded-2xl shadow-lg p-8 w-full max-w-3xl"
         >
+          <span className=" text-black text-sm text-muted">Fields marked with <b>*</b> are required</span>
           {/* Program Name */}
-          <div className="mb-6">
+          <div className="my-6">
             <label htmlFor="programName" className="block text-sm font-bold mb-2">
-              Program Name
+              Program Name*
             </label>
             <input
               type="text"
@@ -140,10 +183,48 @@ export default function AddWorkoutProgramForm() {
             />
           </div>
 
+          {/* Difficulty / Level / Duration */}
+          {isMounted && <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="mb-6">
+              <label className="block text-sm font-bold mb-2">Difficulty</label>
+              <Select
+                options={difficultyOptions}
+                value={difficulty ? { value: difficulty, label: difficulty } : null}
+                onChange={(option) => handleChange(option as SingleValue<Option>, true)}
+                isClearable
+                styles={customStyles}
+                placeholder="Select Difficulty..."
+              />
+            </div>
+            <div className="mb-6">
+              <label className="block text-sm font-bold mb-2">Difficulty</label>
+              <Select
+                options={levelOptions}
+                value={level ? { value: level, label: level } : null}
+                onChange={(option) => handleChange(option as SingleValue<Option>, false)}
+                isClearable
+                styles={customStyles}
+                placeholder="Select Level..."
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold mb-2">Duration</label>
+              <input
+                type="number"
+                className="w-full h-[42px] border border-border rounded-lg px-4 py-3 text-card-foreground focus:ring-2 focus:ring-brand-primary focus:outline-none"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                placeholder="Up to 180 minutes"
+                min={1}
+                max={180}
+              />
+            </div>
+          </div>
+          }
           {/* Program Info */}
-          <div className="mb-6">
+          <div className="mt-6 mb-6">
             <label htmlFor="programInformation" className="block text-sm font-bold mb-2">
-              Program Information (Rich Text JSON)
+              Program Information* (Rich Text JSON)
             </label>
             <textarea
               id="programInformation"
@@ -170,7 +251,7 @@ export default function AddWorkoutProgramForm() {
             className={`mb-6 block border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${dragActive ? "border-brand-primary bg-gray-50" : "border-border"
               }`}
           >
-            <span className="block text-sm font-bold mb-2">Program Image</span>
+            <span className="block text-sm font-bold mb-2">Program Image*</span>
             <input
               type="file"
               id="programImage"
@@ -272,7 +353,8 @@ export default function AddWorkoutProgramForm() {
           <div className="flex items-center justify-end">
             <Button
               type="submit"
-              className="bg-brand-primary text-black font-bold rounded-lg h-12 px-6 shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
+              variant={"outline"}
+              className="bg-brand-primary text-black font-bold rounded-lg h-12 px-6 shadow-lg hover:text-white hover:bg-black hover:border-black"
               disabled={loading}
             >
               {loading ? "Adding..." : "Add Program"}

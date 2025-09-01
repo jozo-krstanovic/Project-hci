@@ -11,6 +11,23 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  // Inside LoginPage component
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setError("Please enter your email to reset password.");
+      return;
+    }
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`, // page we'll create next
+    });
+
+    if (error) {
+      setError(error.message);
+    } else {
+      alert("Password reset email sent! Check your inbox.");
+    }
+  };
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null); // Reset error state
@@ -39,7 +56,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <main className="flex flex-col bg-[#ededed] px-4 py-8">
+      <main className="flex flex-col bg-[#ededed] px-4 py-36">
         {/* Card */}
         <div className="bg-card bg-background w-full max-w-lg lg:max-w-xl border rounded-xl shadow-md p-10 mx-auto my-auto">
 
@@ -53,14 +70,14 @@ export default function LoginPage() {
             <input
               type="email"
               placeholder="Email"
-              className="w-full p-4 border border-black rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full p-4 border border-black rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black font-montserrat"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type="password"
               placeholder="Password"
-              className="w-full p-4 border border-black rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black"
+              className="w-full p-4 border border-black rounded-md text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black font-montserrat"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -77,9 +94,13 @@ export default function LoginPage() {
 
           {/* Links */}
           <div className="flex flex-col items-center mt-8 space-y-2 text-sm font-montserrat">
-            <a href="#" className="text-gray-600 hover:text-black transition">
+            <button
+              type="button"
+              onClick={handleForgotPassword}
+              className="text-gray-600 hover:text-black transition"
+            >
               Forgot Password?
-            </a>
+            </button>
             <Link href="/sign-up" className="text-gray-600 hover:text-black transition">
               Don’t have an account? <span className="font-bold">Sign Up</span>
             </Link>

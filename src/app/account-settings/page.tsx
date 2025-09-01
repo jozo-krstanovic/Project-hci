@@ -210,28 +210,29 @@ export default function AccountSettingsPage() {
                 />
                 <Button
                   onClick={handleUploadClick}
+                  className="hover:text-white hover:bg-black hover:border-black font-montserrat"
                   variant="outline"
                 >
                   Upload New Picture
                 </Button>
-                <p className="text-xs text-muted-foreground mt-2">PNG, JPG, GIF up to 10MB.</p>
+                <p className="text-xs text-muted-foreground mt-2 font-montserrat">PNG, JPG, GIF up to 10MB.</p>
               </div>
             </div>
 
             {/* Nickname Form */}
             <form className="space-y-4" onSubmit={handleSaveNickname}>
               <div>
-                <label htmlFor="nickname" className="block text-sm font-medium text-card-foreground">Nickname</label>
+                <label htmlFor="nickname" className="block text-sm font-medium text-card-foreground font-montserrat">Nickname</label>
                 <input
                   type="text"
                   id="nickname"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
-                  className="mt-1 block w-full p-3 bg-input border border-border rounded-md shadow-sm focus:ring-ring focus:border-ring"
+                  className="mt-1 block w-full p-3 bg-input border border-border rounded-md shadow-sm focus:ring-ring focus:border-ring font-montserrat"
                 />
               </div>
               <div className="text-right">
-                <Button type="submit">
+                <Button type="submit" variant={"outline"} className="hover:text-white hover:bg-black hover:border-black">
                   Save Nickname
                 </Button>
               </div>
@@ -243,17 +244,17 @@ export default function AccountSettingsPage() {
             <h2 className="text-2xl font-bold mb-6 text-card-foreground">Contact Information</h2>
             <form className="space-y-4" onSubmit={handleSaveEmail}>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-card-foreground">Email</label>
+                <label htmlFor="email" className="block text-sm font-medium text-card-foreground font-montserrat">Email</label>
                 <input
                   type="email"
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 block w-full p-3 bg-input border border-border rounded-md shadow-sm focus:ring-ring focus:border-ring"
+                  className="mt-1 block w-full p-3 bg-input border border-border rounded-md shadow-sm focus:ring-ring focus:border-ring font-montserrat"
                 />
               </div>
               <div className="text-right">
-                <Button type="submit">
+                <Button type="submit" variant={"outline"} className="hover:text-white hover:bg-black hover:border-black">
                   Save Email
                 </Button>
               </div>
@@ -262,41 +263,41 @@ export default function AccountSettingsPage() {
         </div>
 
         {/* Right Column - Security Section */}
-        <div className="bg-card border border-border rounded-xl shadow-md p-8 lg:row-span-2">
+        <div className="bg-card border border-border rounded-xl shadow-md p-8 lg:row-span-2 mb-8">
           <h2 className="text-2xl font-bold mb-6 text-card-foreground">Security Settings</h2>
           <form className="space-y-4" onSubmit={handleChangePassword}>
             <div>
-              <label htmlFor="currentPassword" className="block text-sm font-medium text-card-foreground">Current Password</label>
+              <label htmlFor="currentPassword" className="block text-sm font-medium text-card-foreground font-montserrat">Current Password</label>
               <input
                 type="password"
                 id="currentPassword"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                className="mt-1 block w-full p-3 bg-input border border-border rounded-md shadow-sm focus:ring-ring focus:border-ring"
+                className="mt-1 block w-full p-3 bg-input border border-border rounded-md shadow-sm focus:ring-ring focus:border-ring font-montserrat"
               />
             </div>
             <div>
-              <label htmlFor="newPassword" className="block text-sm font-medium text-card-foreground">New Password</label>
+              <label htmlFor="newPassword" className="block text-sm font-medium text-card-foreground font-montserrat">New Password</label>
               <input
                 type="password"
                 id="newPassword"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="mt-1 block w-full p-3 bg-input border border-border rounded-md shadow-sm focus:ring-ring focus:border-ring"
+                className="mt-1 block w-full p-3 bg-input border border-border rounded-md shadow-sm focus:ring-ring focus:border-ring font-montserrat"
               />
             </div>
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-card-foreground">Confirm New Password</label>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-card-foreground font-montserrat">Confirm New Password</label>
               <input
                 type="password"
                 id="confirmPassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="mt-1 block w-full p-3 bg-input border border-border rounded-md shadow-sm focus:ring-ring focus:border-ring"
+                className="mt-1 block w-full p-3 bg-input border border-border rounded-md shadow-sm focus:ring-ring focus:border-ring font-montserrat"
               />
             </div>
             <div className="text-right">
-              <Button type="submit">
+              <Button type="submit" variant={"outline"} className="hover:text-white hover:bg-black hover:border-black">
                 Change Password
               </Button>
             </div>

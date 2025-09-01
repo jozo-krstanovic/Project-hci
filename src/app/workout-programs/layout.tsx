@@ -4,7 +4,7 @@ export default function ShowcaseLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="mt-4">
+    <section className="my-12">
       {children}
     </section>
   );

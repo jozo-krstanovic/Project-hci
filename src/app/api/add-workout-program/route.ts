@@ -29,12 +29,15 @@ export async function POST(request: Request) {
     const formData = await request.formData();
 
     const programName = formData.get('programName') as string;
+    const difficulty = formData.get('difficulty') as string;
+    const level = formData.get('level') as string;
+    const duration = formData.get('duration') as string;
     const programInformationText = formData.get('programInformation') as string;
     const programImageFile = formData.get('programImage') as File | null;
     const programAssetsFiles = formData.getAll('programAssets') as File[];
 
-    if (!programName || !programInformationText) {
-      return NextResponse.json({ error: 'Program name and information are required.' }, { status: 400 });
+    if (!programName || !programInformationText || !programImageFile) {
+      return NextResponse.json({ error: 'Program name, information and image are required.' }, { status: 400 });
     }
 
     const contentfulManagementToken = process.env.CONTENTFUL_MANAGEMENT_TOKEN;
@@ -109,6 +112,15 @@ export async function POST(request: Request) {
       fields: {
         programName: {
           'en-US': programName,
+        },
+        duration: {
+          'en-US': Number(duration),
+        },
+        difficulty: {
+          'en-US': difficulty,
+        },
+        level: {
+          'en-US': level,
         },
         programInformation: {
           'en-US': programInformationRichText,
