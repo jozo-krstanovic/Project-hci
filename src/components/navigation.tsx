@@ -97,7 +97,7 @@ export function Navigation() {
             .from("profiles")
             .select("role")
             .eq("id", currentUser.id)
-            .single();
+            .maybeSingle();
           setRole(profile?.role || null);
           if (error) console.error(error);
         })();
@@ -161,7 +161,8 @@ export function Navigation() {
             height={36}
             alt="Account"
             onClick={toggleDropdown}
-            className="rounded-full cursor-pointer border-2 border-white hover:border-brand-primary transition-all"
+            style={{ objectFit: "cover" }}
+            className="min-w-[42px] min-h-[42px] rounded-full cursor-pointer border-2 border-white hover:border-brand-primary transition-all"
           />
           <div
             className={cn(

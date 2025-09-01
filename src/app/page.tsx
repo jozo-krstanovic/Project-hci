@@ -59,7 +59,7 @@ export default function LandingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                   viewport={{ once: true }}
-                  className="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center text-center space-y-4 hover:shadow-xl transition"
+                  className="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center text-center space-y-4 hover:shadow-xl transition-all duration-300"
                 >
                   <Icon className="w-12 h-12 text-black" />
                   <h3 className="text-xl font-semibold">{f.title}</h3>
