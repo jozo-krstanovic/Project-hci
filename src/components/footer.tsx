@@ -58,7 +58,7 @@ export default function Footer() {
                 height={28}
                 alt="Email"
               />
-              <p className="font-montserrat text-[12px] ml-[10px]">contact@example.com</p>
+              <p className="my-3 font-montserrat text-[12px] ml-[10px]">contact@example.com</p>
             </div>
             <div className="flex items-center">
               <Image
@@ -67,7 +67,7 @@ export default function Footer() {
                 height={28}
                 alt="Phone"
               />
-              <p className="font-montserrat text-[12px] ml-[10px]">+385 987 6543 21</p>
+              <p className="my-3 font-montserrat text-[12px] ml-[10px]">+385 987 6543 21</p>
             </div>
           </div>
         </div>

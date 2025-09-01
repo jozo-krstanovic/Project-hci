@@ -12,7 +12,7 @@ export default function AccountSettingsPage() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [profileImage, setProfileImage] = useState("/assets/palestra-account.png");
+  const [profileImage, setProfileImage] = useState("/assets/profile-placeholder-dark.jpg");
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -28,7 +28,7 @@ export default function AccountSettingsPage() {
       }
       setNickname(user.user_metadata?.full_name || user.email?.split('@')[0] || ""); // Use full_name or part of email
       setEmail(user.email || "");
-      setProfileImage(user.user_metadata?.avatar_url || "/assets/palestra-account.png");
+      setProfileImage(user.user_metadata?.avatar_url || "/assets/profile-placeholder-dark.jpg");
     };
 
     getUser();

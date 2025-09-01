@@ -13,12 +13,18 @@ type Option = {
   label: string;
 }
 
+const possibleDifficultyOptions: Option[] = [
+  { value: "Beginner", label: "Beginner" },
+  { value: "Intermediate", label: "Intermediate" },
+  { value: "Advanced", label: "Advanced" },
+]
+
 const customSelectStyles: StylesConfig<Option, false> = {
   control: (provided, state) => ({
     ...provided,
     backgroundColor: "#ffffff",        // Match your page background (light mode)
-    borderColor: state.isFocused ? "#6366f1" : "#d1d5db", // Tailwind indigo-500 focus, gray-300 default
-    boxShadow: state.isFocused ? "0 0 0 1px #6366f1" : "none",
+    borderColor: state.isFocused ? "#171717" : "#d1d5db", // Tailwind indigo-500 focus, gray-300 default
+    boxShadow: state.isFocused ? "0 0 0 1px #171717" : "none",
     borderRadius: "0.5rem",             // Rounded like your inputs
     paddingLeft: "0px",
     paddingRight: "0",             // Leave space for the arrow
@@ -45,7 +51,7 @@ const customSelectStyles: StylesConfig<Option, false> = {
   }),
   dropdownIndicator: (provided, state) => ({
     ...provided,
-    color: state.isFocused ? "#6366f1" : "#6b7280", // Indigo-500 when focused, gray-500 default
+    color: state.isFocused ? "#171717" : "#6b7280", // Indigo-500 when focused, gray-500 default
     padding: "0 9px 0 0",
   }),
   indicatorSeparator: () => ({
@@ -68,17 +74,13 @@ export default function WorkoutProgramsClientView({
 
   useEffect(() => {
     setIsMounted(true);
+    if (window.innerWidth < 640)
+      setViewMode("card");
+
     return () => {
       setIsMounted(false);
     };
   }, []);
-
-  // Extract unique options for dropdowns
-  const difficultyOptions = useMemo(() => {
-    const set = new Set<string>();
-    programs.forEach(p => p.fields.difficulty && set.add(p.fields.difficulty));
-    return Array.from(set);
-  }, [programs]);
 
   const levelOptions = useMemo(() => {
     const set = new Set<string>();
@@ -86,9 +88,8 @@ export default function WorkoutProgramsClientView({
     return Array.from(set);
   }, [programs]);
 
-  // Map your options for react-select
-  const difficultyOptionsReact: Option[] = difficultyOptions.map((d) => ({ value: d, label: d }));
-  const levelOptionsReact: Option[] = levelOptions.map((l) => ({ value: l, label: l }));
+  const difficultyOptionsReact: Option[] = possibleDifficultyOptions;
+  const levelOptionsReact: Option[] = levelOptions.map((l) => ({ value: l, label: l })).sort((a, b) => a.value.localeCompare(b.value));
 
   // Filter programs
   const filteredPrograms = programs.filter((program) => {
@@ -130,7 +131,7 @@ export default function WorkoutProgramsClientView({
               value={difficultyFilter ? { value: difficultyFilter, label: difficultyFilter } : { value: "", label: "All Difficulties" }}
               onChange={(option) => handleChange(option as SingleValue<Option>, true)}
               styles={customSelectStyles}
-              className="w-[200px]"
+              className="w-full sm:w-[200px]"
               classNamePrefix="react-select"
               defaultValue={{ value: "", label: "All Difficulties" }}
             />
@@ -140,7 +141,7 @@ export default function WorkoutProgramsClientView({
               value={levelFilter ? { value: levelFilter, label: levelFilter } : { value: "", label: "All Levels" }}
               onChange={(option) => handleChange(option as SingleValue<Option>, false)}
               styles={customSelectStyles}
-              className="w-[162px]"
+              className="w-full sm:w-[162px]"
               classNamePrefix="react-select"
             />
 
@@ -149,7 +150,7 @@ export default function WorkoutProgramsClientView({
               placeholder="Max Duration (min)"
               value={maxDurationFilter ?? ""}
               onChange={(e) => setMaxDurationFilter(e.target.value ? Number(e.target.value) : null)}
-              className="p-3 border rounded-lg w-[197px] bg-white"
+              className="p-3 border rounded-lg w-full sm:w-[197px] bg-white"
               min={0}
               max={180}
             />
@@ -166,7 +167,7 @@ export default function WorkoutProgramsClientView({
             onChange={(e) => setSearchQuery(e.target.value)}
           />
 
-          <div className="flex gap-2 mt-2 sm:mt-0">
+          <div className="hidden sm:flex gap-2 mt-2 sm:mt-0">
             <Button
               variant={viewMode === "card" ? "selected" : "outline"}
               onClick={() => setViewMode("card")}
