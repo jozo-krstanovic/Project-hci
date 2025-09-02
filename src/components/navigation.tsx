@@ -19,7 +19,7 @@ type Page = {
 const pages: Page[] = [
   { title: "Home", path: "/" },
   { title: "Programs", path: "/workout-programs" },
-  { title: "Community", path: "/community-motivation" },
+  // { title: "Community", path: "/community-motivation" },
 ];
 
 function processPage(

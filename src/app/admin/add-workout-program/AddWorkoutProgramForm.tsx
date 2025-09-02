@@ -170,7 +170,7 @@ export default function AddWorkoutProgramForm() {
           <span className=" text-black text-sm text-muted">Fields marked with <b>*</b> are required</span>
           {/* Program Name */}
           <div className="my-6">
-            <label htmlFor="programName" className="block text-sm font-bold mb-2">
+            <label htmlFor="programName" className="block font-bold mb-2">
               Program Name*
             </label>
             <input
@@ -186,7 +186,7 @@ export default function AddWorkoutProgramForm() {
           {/* Difficulty / Level / Duration */}
           {isMounted && <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="mb-6">
-              <label className="block text-sm font-bold mb-2">Difficulty</label>
+              <label className="block font-bold mb-2">Difficulty</label>
               <Select
                 options={difficultyOptions}
                 value={difficulty ? { value: difficulty, label: difficulty } : null}
@@ -197,7 +197,7 @@ export default function AddWorkoutProgramForm() {
               />
             </div>
             <div className="mb-6">
-              <label className="block text-sm font-bold mb-2">Difficulty</label>
+              <label className="block font-bold mb-2">Level</label>
               <Select
                 options={levelOptions}
                 value={level ? { value: level, label: level } : null}
@@ -208,7 +208,7 @@ export default function AddWorkoutProgramForm() {
               />
             </div>
             <div>
-              <label className="block text-sm font-bold mb-2">Duration</label>
+              <label className="block font-bold mb-2">Duration</label>
               <input
                 type="number"
                 className="w-full h-[42px] border border-border rounded-lg px-4 py-3 text-card-foreground focus:ring-2 focus:ring-brand-primary focus:outline-none"
@@ -223,7 +223,7 @@ export default function AddWorkoutProgramForm() {
           }
           {/* Program Info */}
           <div className="mt-6 mb-6">
-            <label htmlFor="programInformation" className="block text-sm font-bold mb-2">
+            <label htmlFor="programInformation" className="block font-bold mb-2">
               Program Information* (Rich Text JSON)
             </label>
             <textarea
@@ -251,7 +251,7 @@ export default function AddWorkoutProgramForm() {
             className={`mb-6 block border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${dragActive ? "border-brand-primary bg-gray-50" : "border-border"
               }`}
           >
-            <span className="block text-sm font-bold mb-2">Program Image*</span>
+            <span className="block font-bold mb-2">Program Image*</span>
             <input
               type="file"
               id="programImage"
@@ -298,7 +298,7 @@ export default function AddWorkoutProgramForm() {
             className={`mb-6 block border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${dragActive ? "border-brand-primary bg-gray-50" : "border-border"
               }`}
           >
-            <span className="block text-sm font-bold mb-2">Program Assets</span>
+            <span className="block font-bold mb-2">Program Assets</span>
             <input
               type="file"
               id="programAssets"
@@ -350,16 +350,14 @@ export default function AddWorkoutProgramForm() {
           </label>
 
           {/* Submit */}
-          <div className="flex items-center justify-end">
-            <Button
-              type="submit"
-              variant={"outline"}
-              className="bg-brand-primary text-black font-bold rounded-lg h-12 px-6 shadow-lg hover:text-white hover:bg-black hover:border-black"
-              disabled={loading}
-            >
-              {loading ? "Adding..." : "Add Program"}
-            </Button>
-          </div>
+          <Button
+            type="submit"
+            variant={"outline"}
+            className="w-full bg-brand-primary text-lg text-black font-bold rounded-lg h-14 px-6 py-3 shadow-lg hover:text-white hover:bg-black hover:border-black"
+            disabled={loading}
+          >
+            {loading ? "Adding..." : "Add Program"}
+          </Button>
         </form>
         {message && (
           <div

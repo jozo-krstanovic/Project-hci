@@ -27,12 +27,12 @@ export const customStyles: StylesConfig<Option, false> = {
     control: (provided, state) => ({
         ...provided,
         backgroundColor: "white",
-        borderColor: state.isFocused ? "#4f46e5" : "#d1d5db", // Tailwind focus:ring-indigo-500 / border-gray-300
+        borderColor: state.isFocused ? "#171717" : "#d1d5db", // Tailwind focus:ring-indigo-500 / border-gray-300
         boxShadow: state.isFocused ? "0 0 0 2px rgba(79,70,229,0.2)" : "none",
         borderRadius: "0.5rem", // rounded-lg
         padding: "0.125rem", // Adjust padding
         "&:hover": {
-            borderColor: "#4f46e5",
+            borderColor: "#171717",
         },
     }),
     menu: (provided) => ({

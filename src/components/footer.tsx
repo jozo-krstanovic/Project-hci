@@ -17,7 +17,7 @@ export default function Footer() {
           <h2 className="text-[28px]">Sitemap</h2>
           <div className="flex flex-col">
             <Link href="/workout-programs" className="font-montserrat text-[16px]">Programs</Link>
-            <Link href="/community-motivation" className="font-montserrat text-[16px]">Community</Link>
+            {/* <Link href="/community-motivation" className="font-montserrat text-[16px]">Community</Link> */}
             <Link href="/account-settings" className="font-montserrat text-[16px]">Account Settings</Link>
 
           </div>
