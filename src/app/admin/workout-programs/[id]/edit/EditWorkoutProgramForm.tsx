@@ -171,9 +171,10 @@ export default function EditWorkoutProgramForm({ program, programId }: EditWorko
 
           {/* Program Name */}
           <div>
-            <label className="block font-bold mb-2">Program Name*</label>
+            <label htmlFor="programName" className="block font-bold mb-2">Program Name*</label>
             <input
               type="text"
+              id="programName"
               value={programName}
               onChange={(e) => setProgramName(e.target.value)}
               className="w-full border border-border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-brand-primary"
@@ -184,8 +185,9 @@ export default function EditWorkoutProgramForm({ program, programId }: EditWorko
           {/* Difficulty / Level / Duration */}
           {isMounted && <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="mb-6">
-              <label className="block text-sm font-bold mb-2">Difficulty</label>
+              <label htmlFor="difficulty" className="block font-bold mb-2">Difficulty</label>
               <Select
+                id="difficulty"
                 options={difficultyOptions}
                 value={difficulty ? { value: difficulty, label: difficulty } : null}
                 onChange={(option) => handleChange(option as SingleValue<Option>, true)}
@@ -195,8 +197,9 @@ export default function EditWorkoutProgramForm({ program, programId }: EditWorko
               />
             </div>
             <div className="mb-6">
-              <label className="block text-sm font-bold mb-2">Difficulty</label>
+              <label htmlFor="level" className="block font-bold mb-2">Level</label>
               <Select
+                id="level"
                 options={levelOptions}
                 value={level ? { value: level, label: level } : null}
                 onChange={(option) => handleChange(option as SingleValue<Option>, false)}
@@ -206,8 +209,9 @@ export default function EditWorkoutProgramForm({ program, programId }: EditWorko
               />
             </div>
             <div>
-              <label className="block text-sm font-bold mb-2">Duration</label>
+              <label htmlFor="duration" className="block font-bold mb-2">Duration</label>
               <input
+                id="duration"
                 type="number"
                 className="w-full h-[42px] border border-border rounded-lg px-4 py-3 text-card-foreground focus:ring-2 focus:ring-brand-primary focus:outline-none"
                 value={duration}
@@ -222,8 +226,9 @@ export default function EditWorkoutProgramForm({ program, programId }: EditWorko
 
           {/* Program Information */}
           <div>
-            <label className="block font-bold mb-2">Program Information* (Rich Text JSON):</label>
+            <label htmlFor="programInformation" className="block font-bold mb-2">Program Information* (Rich Text JSON):</label>
             <textarea
+              id="programInformation"
               value={programInformation}
               onChange={(e) => setProgramInformation(e.target.value)}
               className="w-full border border-border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-brand-primary h-32"
@@ -250,7 +255,7 @@ export default function EditWorkoutProgramForm({ program, programId }: EditWorko
             }}
             className={`block border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${dragActive ? "border-brand-primary bg-gray-50" : "border-border"} mb-6`}
           >
-            <span className="block text-sm font-bold mb-2">Program Image*</span>
+            <span className="block font-bold mb-2">Program Image*</span>
             <input
               type="file"
               id="programImage"
@@ -292,7 +297,7 @@ export default function EditWorkoutProgramForm({ program, programId }: EditWorko
             }}
             className={`block border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition ${dragActive ? "border-brand-primary bg-gray-50" : "border-border"} mb-6`}
           >
-            <span className="block text-sm font-bold mb-2">Program Assets</span>
+            <span className="block font-bold mb-2">Program Assets</span>
             <input
               type="file"
               id="programAssets"
@@ -331,7 +336,8 @@ export default function EditWorkoutProgramForm({ program, programId }: EditWorko
           {/* Submit Button */}
           <Button
             type="submit"
-            className="bg-brand-primary text-black font-bold rounded-lg h-14 px-6 py-3 shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300"
+            variant={"outline"}
+            className="bg-brand-primary text-lg text-black font-bold rounded-lg h-14 px-6 py-3 shadow-lg hover:text-white hover:bg-black hover:border-black"
             disabled={loading}
           >
             {loading ? "Updating..." : "Update Program"}

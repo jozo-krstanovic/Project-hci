@@ -3,8 +3,23 @@
 import { motion } from "framer-motion";
 import { JoinNowButton } from "@/components/JoinNowButton";
 import { Dumbbell, Users, Clock, ListCheck, Smile, Star } from "lucide-react";
+import { useEffect, useState } from "react";
+import type { User } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase/client";
 
 export default function LandingPage() {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const getUserAndProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      setUser(user);
+    }
+    getUserAndProfile()
+  }, []);
+
   return (
     <>
       {/* Hero Section */}
@@ -39,7 +54,7 @@ export default function LandingPage() {
             className="inline-block"
             whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(255,255,255,0.6)' }}
           >
-            <JoinNowButton className="mx-auto md:mx-0 px-[30px] py-[15px] font-bold rounded-[5px]" />
+            <JoinNowButton isLoggedIn={!!user} className="mx-auto md:mx-0 px-[30px] py-[15px] font-bold rounded-[5px]" />
           </motion.div>
         </div>
       </section>
@@ -74,7 +89,7 @@ export default function LandingPage() {
             transition={{ duration: 0.3, yoyo: Infinity }}
           >
             <h3 className="text-2xl md:text-3xl font-semibold">What are you waiting for?</h3>
-            <JoinNowButton className="px-[30px] py-[15px] font-bold rounded-[5px]" />
+            <JoinNowButton isLoggedIn={!!user} className="px-[30px] py-[15px] font-bold rounded-[5px]" />
           </motion.div>
         </div>
       </section>

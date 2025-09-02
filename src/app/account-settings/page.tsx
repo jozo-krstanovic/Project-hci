@@ -187,7 +187,7 @@ export default function AccountSettingsPage() {
         <div className="space-y-8">
           {/* Profile Section */}
           <div className="bg-card border border-border rounded-xl shadow-md p-8">
-            <h2 className="text-2xl font-bold mb-6 text-card-foreground">Profile Settings</h2>
+            <h2 className="text-3xl font-bold mb-6 text-card-foreground">Profile Settings</h2>
 
             {/* Profile Picture */}
             <div className="flex items-center space-x-6 mb-8">
@@ -210,7 +210,7 @@ export default function AccountSettingsPage() {
                 />
                 <Button
                   onClick={handleUploadClick}
-                  className="hover:text-white hover:bg-black hover:border-black font-montserrat"
+                  className="text-md hover:text-white hover:bg-black hover:border-black font-montserrat"
                   variant="outline"
                 >
                   Upload New Picture
@@ -232,7 +232,7 @@ export default function AccountSettingsPage() {
                 />
               </div>
               <div className="text-right">
-                <Button type="submit" variant={"outline"} className="hover:text-white hover:bg-black hover:border-black">
+                <Button type="submit" variant={"outline"} className="text-md hover:text-white hover:bg-black hover:border-black">
                   Save Nickname
                 </Button>
               </div>
@@ -241,7 +241,7 @@ export default function AccountSettingsPage() {
 
           {/* Contact Information Section */}
           <div className="bg-card border border-border rounded-xl shadow-md p-8">
-            <h2 className="text-2xl font-bold mb-6 text-card-foreground">Contact Information</h2>
+            <h2 className="text-3xl font-bold mb-6 text-card-foreground">Contact Information</h2>
             <form className="space-y-4" onSubmit={handleSaveEmail}>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-card-foreground font-montserrat">Email</label>
@@ -254,7 +254,7 @@ export default function AccountSettingsPage() {
                 />
               </div>
               <div className="text-right">
-                <Button type="submit" variant={"outline"} className="hover:text-white hover:bg-black hover:border-black">
+                <Button type="submit" variant={"outline"} className="text-md hover:text-white hover:bg-black hover:border-black">
                   Save Email
                 </Button>
               </div>
@@ -264,7 +264,7 @@ export default function AccountSettingsPage() {
 
         {/* Right Column - Security Section */}
         <div className="bg-card border border-border rounded-xl shadow-md p-8 lg:row-span-2 mb-8">
-          <h2 className="text-2xl font-bold mb-6 text-card-foreground">Security Settings</h2>
+          <h2 className="text-3xl font-bold mb-6 text-card-foreground">Security Settings</h2>
           <form className="space-y-4" onSubmit={handleChangePassword}>
             <div>
               <label htmlFor="currentPassword" className="block text-sm font-medium text-card-foreground font-montserrat">Current Password</label>
@@ -297,7 +297,7 @@ export default function AccountSettingsPage() {
               />
             </div>
             <div className="text-right">
-              <Button type="submit" variant={"outline"} className="hover:text-white hover:bg-black hover:border-black">
+              <Button type="submit" variant={"outline"} className="text-md hover:text-white hover:bg-black hover:border-black">
                 Change Password
               </Button>
             </div>

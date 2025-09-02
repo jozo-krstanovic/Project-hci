@@ -4,18 +4,19 @@ import { cn } from "@/lib/utils";
 
 interface JoinNowButtonProps {
   className?: string;
+  isLoggedIn?: boolean;
 }
 
-export function JoinNowButton({ className }: JoinNowButtonProps) {
+export function JoinNowButton({ className, isLoggedIn }: JoinNowButtonProps) {
   return (
     <Button asChild className={cn(
-      "bg-white text-black border-[3px] border-black font-bold",
+      "text-xl bg-white text-black border-[3px] border-black font-bold",
       "hover:bg-black hover:text-white hover:border-white",
       "transition-colors duration-200",
       "h-[56px] px-[30px] py-[15px]", // Explicitly set height and padding
       className
     )}>
-      <Link href="/sign-up">
+      <Link href={isLoggedIn ? "/workout-programs" : "/sign-up"}>
         Join Now
       </Link>
     </Button>
